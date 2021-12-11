@@ -24,7 +24,6 @@ def plot_objeto(objeto: Objetos):
     fig, ax = init_plot()
 
     for linha in objeto.arestas:
-        print(linha)
         ax.plot(
             [linha[0][0], linha[1][0]],
             [linha[0][1], linha[1][1]],
@@ -44,7 +43,7 @@ def plot_objeto(objeto: Objetos):
     plt.show()
     
 def save_image(image_name: str):
-    plt.savefig(image_name)
+    plt.savefig(image_name + ".png")
 
 
 def plot_objetos(objetos: List[Objetos], titulo: str):
