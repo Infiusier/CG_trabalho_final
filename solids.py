@@ -11,25 +11,28 @@ class Objetos():
         self.vertices: Any = None  
         self.arestas: Any = None
         self.faces: Any = None
-        self.origem: List[float] = (0,0,0)  
+        self.origem: List[float] = [0,0,0]  
         self.titulo: str = ""
         self.cor: List[any] = None
         
     def update_solid_features(self):
         self.criaArestas()
         self.criaFaces()
+        self.origem = self.vertices[0]
 
-    def translacao(self, x: float, y: float, z: float):
-        
+    def translacao(self, point : Tuple):
         '''Implementação de uma forma mais simples de transladar '''
         for i in range(len(self.vertices)):
             line = self.vertices[i]
-            line[0] += x
-            line[1] += y
-            line[2] += z
+            line[0] += point[0]
+            line[1] += point[1]
+            line[2] += point[2]
             self.vertices[i] = line
                   
-        self.origem = (x,y,z)
+        #self.origem[0] += point[0]
+        #self.origem[1] += point[1]
+        #self.origem[2] += point[2]
+        self.origem = self.vertices[0]
               
         self.update_solid_features()
        
@@ -59,7 +62,18 @@ class Objetos():
 #         self.update_solid_features()
 #===============================================================================
            
-    def rotacaoEixoY(self, angulo):
+    def rotacaoEixoY(self, angulo, pivot_point: Tuple = None):
+        
+        if pivot_point == None:
+            pivot_point = tuple(self.origem)
+            
+        
+        aux_origin = self.origem[:]
+        
+        translation_point = (0-pivot_point[0],0-pivot_point[1],0-pivot_point[2])
+        
+        self.translacao(translation_point)
+        
         angulo = radians(angulo)
         rot = np.array(
             [
@@ -69,6 +83,10 @@ class Objetos():
             ])
 
         self.vertices = np.matmul(self.vertices, rot)
+        self.origem = self.vertices[0]
+        
+        translation_point = (pivot_point[0],pivot_point[1],pivot_point[2])
+        self.translacao(translation_point)
         
         self.update_solid_features()
 
@@ -265,10 +283,6 @@ class Piramide(Objetos):
     
     def __init__(self):
         super().__init__()
-        
-    def create_solid_features(self):
-        self.criaArestas()
-        self.criaFaces()
 
     def criaPiramide(self,x: float = 1, y: float = 1, z: float = 1):
         
