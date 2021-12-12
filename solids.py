@@ -1,3 +1,4 @@
+# coding: utf-8
 from dataclasses import dataclass
 import numpy as np
 from math import sin, cos, radians
@@ -19,31 +20,45 @@ class Objetos():
         self.criaFaces()
 
     def translacao(self, x: float, y: float, z: float):
-        #=======================================================================
-        # origem = []
-        # 
-        # origem.append(x - self.origem[0])
-        # origem.append(y - self.origem[1])
-        # origem.append(z - self.origem[2])  
-        #=======================================================================
-
-        matrizDeTranslacao = np.array(
-            [
-                [1, 0, 0, 0],
-                [0, 1, 0, 0],
-                [0, 0, 1, 0],
-                [origem[0], origem[1], origem[2], 1],
-            ]
-        )
-
-        self.vertices = np.hstack((self.vertices, np.ones((len(self.vertices), 1))))
-        self.vertices = np.dot(self.vertices, matrizDeTranslacao)
-
-        self.vertices = np.delete(self.vertices, 3, axis=1)
+        
+        '''Implementação de uma forma mais simples de transladar '''
+        for i in range(len(self.vertices)):
+            line = self.vertices[i]
+            line[0] += x
+            line[1] += y
+            line[2] += z
+            self.vertices[i] = line
+                  
         self.origem = (x,y,z)
-        
+              
         self.update_solid_features()
-        
+       
+#===============================================================================
+#         '''Implementação q n entendi'''
+#         origem = []
+#          
+#         origem.append(x - self.origem[0])
+#         origem.append(y - self.origem[1])
+#         origem.append(z - self.origem[2])  
+# 
+#         matrizDeTranslacao = np.array(
+#             [
+#                 [1, 0, 0, 0],
+#                 [0, 1, 0, 0],
+#                 [0, 0, 1, 0],
+#                 [origem[0], origem[1], origem[2], 1],
+#             ]
+#         )
+# 
+#         self.vertices = np.hstack((self.vertices, np.ones((len(self.vertices), 1))))
+#         self.vertices = np.dot(self.vertices, matrizDeTranslacao)
+# 
+#         self.vertices = np.delete(self.vertices, 3, axis=1)
+#         self.origem = (x,y,z)
+#         
+#         self.update_solid_features()
+#===============================================================================
+           
     def rotacaoEixoY(self, angulo):
         angulo = radians(angulo)
         rot = np.array(
