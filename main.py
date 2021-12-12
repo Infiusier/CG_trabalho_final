@@ -42,7 +42,7 @@ def main_q2():
     tronco.criaPiramideTronco(origin_point = (-5.5,0,0),lower_edge = 3, upper_edge = 1.3, z = 2.5)
     solids_list.append((tronco,"green"))
     
-    plot_objetos(solids_list)
+    plot_objetos(solids_list,view = "2d")
     
 def main_q3():
     
@@ -69,5 +69,5 @@ def main_q3():
 
 if __name__ == "__main__":
     #main_q1()
-    #main_q2()
-    main_q3()
+    main_q2()
+    #main_q3()
