@@ -21,7 +21,7 @@ def init_eixos(ax):
     ax.plot([0, 0], [5.2, -5.2], [0, 0], color='Black', alpha=0.4)
     ax.plot([0, 0], [0, 0], [5.2, -5.2], color='Black', alpha=0.4)
 
-def plot_objeto(objeto: Objetos):
+def plot_objeto(objeto: Objetos, color: str = "black"):
     fig, ax = init_plot()
 
     for linha in objeto.arestas:
@@ -32,25 +32,22 @@ def plot_objeto(objeto: Objetos):
         )
 
     ax.add_collection3d(Poly3DCollection(
-        objeto.faces, facecolors=objeto.cor[0], linewidths=1.5, edgecolors=objeto.cor[0], alpha=objeto.cor[1]))
+        objeto.faces, facecolors=color, linewidths=1.5, edgecolors=color, alpha=0.1))
 
     ax.set_zlim3d(-5, 5)
     ax.set_xlim3d(-5, 5)
     ax.set_ylim3d(-5, 5)
 
     init_eixos(ax)
-
-    save_image(objeto.titulo)
     plt.show()
     
-def save_image(image_name: str):
-    plt.savefig(image_name + ".png")
 
 
-def plot_objetos(objetos: List[Objetos], titulo: str):
+def plot_objetos(objetos: List[Tuple]):
     fig, ax = init_plot()
+    
 
-    for objeto in objetos:
+    for objeto,color in objetos:
         for linha in objeto.arestas:
             print(linha)
             ax.plot(
@@ -60,15 +57,13 @@ def plot_objetos(objetos: List[Objetos], titulo: str):
             )
 
         ax.add_collection3d(Poly3DCollection(
-            objeto.faces, facecolors=objeto.cor[0], linewidths=1.5, edgecolors=objeto.cor[0], alpha=objeto.cor[1]))
+            objeto.faces, facecolors=color, linewidths=1.5, edgecolors=color, alpha=0.1))
 
     ax.set_zlim3d(-6, 6)
     ax.set_xlim3d(-6, 6)
     ax.set_ylim3d(-6, 6)
 
     init_eixos(ax)
-
-    plt.savefig("imagens/" + titulo + ".png")
     plt.show()
 
 

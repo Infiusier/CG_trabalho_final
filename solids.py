@@ -11,9 +11,7 @@ class Objetos():
         self.vertices: Any = None  
         self.arestas: Any = None
         self.faces: Any = None
-        self.origem: List[float] = [0,0,0]  
-        self.titulo: str = ""
-        self.cor: List[any] = None
+        self.origem: List[float] = [0,0,0]
         
     def update_solid_features(self):
         self.criaArestas()
@@ -126,18 +124,26 @@ class PiramideTronco(Objetos):
     def __init__(self):
         super().__init__()
     
-    def criaPiramideTronco(self,xBase: float = 1, yBase: float = 1, z: float = 1, xSuperior: float = 1, ySuperior: float = 1):
+    def criaPiramideTronco(self,origin_point: Tuple = (0,0,0),xBase: float = 1, yBase: float = 1, z: float = 1, xSuperior: float = 1, ySuperior: float = 1, lower_edge = None, upper_edge = None):
+        
+        if lower_edge != None:
+            xBase = lower_edge
+            yBase = lower_edge
+            
+        if upper_edge != None:
+            xSuperior = upper_edge
+            ySuperior = upper_edge
        
         self.vertices=np.array(
             [
-                [0, 0, 0],      
-                [xBase, 0, 0],  
-                [xBase, yBase, 0],
-                [0, yBase, 0],
-                [(xBase-xSuperior)/2, (yBase-ySuperior)/2, z],       
-                [(xBase-xSuperior)/2 + xSuperior,  (yBase-ySuperior)/2, z],
-                [(xBase-xSuperior)/2 + xSuperior, (yBase-ySuperior)/2 + ySuperior, z],
-                [(xBase-xSuperior)/2, (yBase-ySuperior)/2 + ySuperior, z], 
+                [origin_point[0], origin_point[1], origin_point[2]],      
+                [origin_point[0] + xBase, origin_point[1], origin_point[2]],  
+                [origin_point[0] + xBase, origin_point[1] + yBase, origin_point[2]],
+                [origin_point[0], origin_point[1] + yBase, origin_point[2]],
+                [origin_point[0] + (xBase-xSuperior)/2, origin_point[1] + (yBase-ySuperior)/2, origin_point[2] + z],       
+                [origin_point[0] + (xBase-xSuperior)/2 + xSuperior, origin_point[1] + (yBase-ySuperior)/2, origin_point[2] + z],
+                [origin_point[0] + (xBase-xSuperior)/2 + xSuperior, origin_point[1] + (yBase-ySuperior)/2 + ySuperior, origin_point[2] + z],
+                [origin_point[0] + (xBase-xSuperior)/2, origin_point[1] + (yBase-ySuperior)/2 + ySuperior, origin_point[2] + z], 
             ]
         )
         
@@ -206,7 +212,13 @@ class Paralelepipedo(Objetos):
     def __init__(self):
         super().__init__()
 
-    def criaParalelepipedo(self,pontoInicial: Tuple, x: float = 1, y: float = 1, z: float = 1):
+    def criaParalelepipedo(self,pontoInicial: Tuple = (0,0,0), x: float = 1, y: float = 1, z: float = 1, edge: float = None):
+        
+        if edge != None:
+            x = edge
+            y = edge
+            z = edge
+        
         self.vertices = np.array(
                 [
                     [pontoInicial[0], pontoInicial[1], pontoInicial[2]],  
@@ -284,15 +296,19 @@ class Piramide(Objetos):
     def __init__(self):
         super().__init__()
 
-    def criaPiramide(self,x: float = 1, y: float = 1, z: float = 1):
+    def criaPiramide(self,origin_point: Tuple = (0,0,0),x: float = 1, y: float = 1, z: float = 1, edge = None):
+        
+        if  edge != None:
+            x = edge
+            y = edge
         
         self.vertices=np.array(
             [
-                [0, 0, 0], 
-                [x, 0, 0], 
-                [x, y, 0], 
-                [0, y, 0],  
-                [x/2, y/2, z], 
+                [origin_point[0], origin_point[1], origin_point[2]], 
+                [origin_point[0] + x, origin_point[1], origin_point[2]], 
+                [origin_point[0] + x, origin_point[1] + y, origin_point[2]], 
+                [origin_point[0],origin_point[1] + y, origin_point[2]],  
+                [origin_point[0] + x/2,origin_point[1] + y/2,origin_point[2] + z], 
             ]
         )
         
