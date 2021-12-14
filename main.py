@@ -59,19 +59,15 @@ def main_q3():
     pyramid_trunk.create_pyramid_trunk(origin_point = (-5.5,0,0),lower_edge = 3, upper_edge = 1.3, z = 2.5)
 
     '''A aaprtir daqui e necessario revisar oq ta acontecendo'''
-    eye_coordinates = (6, 6, 6)
+    eye_coordinates = (-6, -6, 6)
     VV_mid_point = Solid.solid_vision_volume([cube, pyramid,parallelepiped,pyramid_trunk])
 
     camera_axis = create_camera_axis(VV_mid_point, eye_coordinates)
-    inverse_camera_axis = np.linalg.inv(camera_axis)
 
-    cube.vertices = np.matmul(inverse_camera_axis, cube.vertices.T).T
-
-    pyramid.vertices = np.matmul(inverse_camera_axis, pyramid.vertices.T).T
-
-    parallelepiped.vertices = np.matmul(inverse_camera_axis, parallelepiped.vertices.T).T
-
-    pyramid_trunk.vertices = np.matmul(inverse_camera_axis, pyramid_trunk.vertices.T).T
+    cube.vertices = np.matmul(camera_axis, cube.vertices.T).T
+    pyramid.vertices = np.matmul(camera_axis, pyramid.vertices.T).T
+    parallelepiped.vertices = np.matmul(camera_axis, parallelepiped.vertices.T).T
+    pyramid_trunk.vertices = np.matmul(camera_axis, pyramid_trunk.vertices.T).T
     
     
     solids_list = []
@@ -83,7 +79,7 @@ def main_q3():
     for solid,color in solids_list:
         solid.update_solid_features()
     
-    plot_solids(solids_list, eye = (eye_coordinates,inverse_camera_axis))
+    plot_solids(solids_list, eye = (eye_coordinates,camera_axis))
 
 if __name__ == "__main__":
     #main_q1()

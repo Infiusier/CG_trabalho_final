@@ -8,7 +8,7 @@ from typing import *
 
 def create_camera_axis(volume_vision_mid_point, eye_coordinates):
     n = np.subtract(volume_vision_mid_point, eye_coordinates)
-    aux_vector = (1, 1, 0)
+    aux_vector = (0.12345, 0.54321, 0)
     u = np.cross(n, aux_vector)
     v = np.cross(u, n)
 
@@ -58,7 +58,7 @@ def plot_solids(solids: List[Tuple],view: str = "3d", eye: Tuple = None):
         for edge in solid.edges:
             
             if view == "3d":
-                ax.plot([edge[0][0], edge[1][0]],[edge[0][1], edge[1][1]],zs=[edge[0][2], edge[1][2]],)
+                ax.plot([edge[0][0], edge[1][0]],[edge[0][1], edge[1][1]],zs=[edge[0][2], edge[1][2]])
                 
             elif view == "2d":
                 ax.plot([edge[0][0], edge[1][0]],[edge[0][1], edge[1][1]], color=color)
