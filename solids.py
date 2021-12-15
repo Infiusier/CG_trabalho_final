@@ -6,15 +6,14 @@ from typing import *
 class Solid():
     
     def __init__(self):
-        self.faces: Any = None
-        self.vertices: Any = None  
-        self.edges: Any = None
+        self.faces = None
+        self.vertices = None  
+        self.edges = None
         self.origin: List[float] = [0,0,0]
         
     def update_solid_features(self):
         self.update_faces()
-        self.update_edges()
-        
+        self.update_edges()        
         self.origin = self.vertices[0]
 
     def solid_translation(self, point : Tuple):
@@ -24,8 +23,6 @@ class Solid():
             line[1] += point[1]
             line[2] += point[2]
             self.vertices[i] = line
-                  
-        self.origin = self.vertices[0]
               
         self.update_solid_features()
            
@@ -33,7 +30,6 @@ class Solid():
         
         if pivot_point == None:
             pivot_point = tuple(self.origin)
-            
         
         aux_origin = self.origin[:]
         
@@ -42,13 +38,12 @@ class Solid():
         self.solid_translation(translation_point)
         
         angle = radians(angle)
-        rot = np.array(
-            [[cos(angle), -sin(angle), 0],
-             [sin(angle), cos(angle), 0],
-             [0, 0, 1]])
+        rotation_matrix = np.array([[cos(angle), -sin(angle), 0],
+                                    [sin(angle), cos(angle), 0],
+                                    [0, 0, 1]])
 
-        self.vertices = np.matmul(self.vertices, rot)
-        self.origin = self.vertices[0]
+        self.vertices = np.matmul(self.vertices, rotation_matrix)
+        self.update_solid_features()
         
         translation_point = (pivot_point[0],pivot_point[1],pivot_point[2])
         self.solid_translation(translation_point)
@@ -176,7 +171,7 @@ class Pyramid_trunk(Solid):
     def __init__(self):
         super().__init__()
     
-    def create_pyramid_trunk(self,origin_point: Tuple = (0,0,0),x_lower: float = 1, y_lower: float = 1, z: float = 1, x_upper: float = 1, y_upper: float = 1, lower_edge = None, upper_edge = None):
+    def create_pyramid_trunk(self,origin_point: Tuple = (0,0,0),x_lower: float = 1, y_lower: float = 1, x_upper: float = 1, y_upper: float = 1, z: float = 1, lower_edge = None, upper_edge = None):
         
         if lower_edge != None:
             x_lower = lower_edge
@@ -197,7 +192,6 @@ class Pyramid_trunk(Solid):
         
         self.update_solid_features()
        
-
     def update_edges(self):
         self.edges = [[self.vertices[0], self.vertices[1]], 
                       [self.vertices[1], self.vertices[2]],  
