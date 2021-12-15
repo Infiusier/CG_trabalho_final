@@ -2,6 +2,12 @@
 from solids import *
 from draw import *
 
+def matrix_multiplication(vertices_matrix, rt_matrix):
+    vertices_matrix = np.hstack((vertices_matrix, np.ones((len(vertices_matrix), 1))))
+    vertices_matrix = np.matmul(vertices_matrix, rt_matrix)
+    vertices_matrix = np.delete(vertices_matrix, 3, axis=1)
+    return vertices_matrix
+
 def main_q1():
 
     draw = Draw()
@@ -67,12 +73,18 @@ def main_q3():
     VV_mid_point = Solid.solid_vision_volume([cube, pyramid,parallelepiped,pyramid_trunk])
 
     camera_axis = draw.create_camera_axis(VV_mid_point, eye_coordinates)
+    inverse_camera_axis = np.linalg.inv(camera_axis)
     
-    cube.vertices = np.matmul(camera_axis, cube.vertices.T).T
-    pyramid.vertices = np.matmul(camera_axis, pyramid.vertices.T).T
-    parallelepiped.vertices = np.matmul(camera_axis, parallelepiped.vertices.T).T
-    pyramid_trunk.vertices = np.matmul(camera_axis, pyramid_trunk.vertices.T).T
+    rt_matrix = np.array([[camera_axis[0][0],camera_axis[0][1],camera_axis[0][2],(-eye_coordinates[0] * camera_axis[0][0]) + (-eye_coordinates[1] * camera_axis[0][1]) + (-eye_coordinates[2] * camera_axis[0][2])],
+                          [camera_axis[1][0],camera_axis[1][1],camera_axis[1][2],(-eye_coordinates[0] * camera_axis[1][0]) + (-eye_coordinates[1] * camera_axis[1][1]) + (-eye_coordinates[2] * camera_axis[1][2])],
+                          [camera_axis[2][0],camera_axis[2][1],camera_axis[2][2],(-eye_coordinates[0] * camera_axis[2][0]) + (-eye_coordinates[1] * camera_axis[2][1]) + (-eye_coordinates[2] * camera_axis[2][2])],
+                          [0,0,0,1]])
     
+    
+    cube.vertices = matrix_multiplication(cube.vertices,rt_matrix)
+    pyramid.vertices = matrix_multiplication(pyramid.vertices,rt_matrix)
+    parallelepiped.vertices = matrix_multiplication(parallelepiped.vertices,rt_matrix)
+    pyramid_trunk.vertices = matrix_multiplication(pyramid_trunk.vertices,rt_matrix)
     
     solids_list = []
     solids_list.append((cube,"red"))
@@ -83,7 +95,7 @@ def main_q3():
     for solid,color in solids_list:
         solid.update_solid_features()
     
-    draw.draw_solids(solids_list, eye = (eye_coordinates,camera_axis))
+    draw.draw_solids(solids_list, eye = (eye_coordinates,inverse_camera_axis))
     
 def main_q4():
     
@@ -106,10 +118,16 @@ def main_q4():
 
     camera_axis = draw.create_camera_axis(VV_mid_point, eye_coordinates)
     
-    cube.vertices = np.matmul(camera_axis, cube.vertices.T).T
-    pyramid.vertices = np.matmul(camera_axis, pyramid.vertices.T).T
-    parallelepiped.vertices = np.matmul(camera_axis, parallelepiped.vertices.T).T
-    pyramid_trunk.vertices = np.matmul(camera_axis, pyramid_trunk.vertices.T).T
+    rt_matrix = np.array([[camera_axis[0][0],camera_axis[0][1],camera_axis[0][2],(-eye_coordinates[0] * camera_axis[0][0]) + (-eye_coordinates[1] * camera_axis[0][1]) + (-eye_coordinates[2] * camera_axis[0][2])],
+                          [camera_axis[1][0],camera_axis[1][1],camera_axis[1][2],(-eye_coordinates[0] * camera_axis[1][0]) + (-eye_coordinates[1] * camera_axis[1][1]) + (-eye_coordinates[2] * camera_axis[1][2])],
+                          [camera_axis[2][0],camera_axis[2][1],camera_axis[2][2],(-eye_coordinates[0] * camera_axis[2][0]) + (-eye_coordinates[1] * camera_axis[2][1]) + (-eye_coordinates[2] * camera_axis[2][2])],
+                          [0,0,0,1]])
+    
+    
+    cube.vertices = matrix_multiplication(cube.vertices,rt_matrix)
+    pyramid.vertices = matrix_multiplication(pyramid.vertices,rt_matrix)
+    parallelepiped.vertices = matrix_multiplication(parallelepiped.vertices,rt_matrix)
+    pyramid_trunk.vertices = matrix_multiplication(pyramid_trunk.vertices,rt_matrix)
     
     projection_2d = [[1, 0, 0],
                      [0, 1, 0],
@@ -132,7 +150,7 @@ def main_q4():
     draw.draw_solids(solids_list, eye = (eye_coordinates,camera_axis),view = "2d")
 
 if __name__ == "__main__":
-    #main_q1()
-    #main_q2()
+    main_q1()
+    main_q2()
     main_q3()
     main_q4()
